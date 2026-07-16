@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../BeatCheck.UsersAPI.Data/BeatCheck.Users.Data.csproj" />
+  <Project Path="BeatCheck.Users.WebAPI.csproj" />
+</Solution>
