@@ -1,0 +1,6 @@
+@BeatCheck.Users.WebAPI_HostAddress = http://localhost:5092
+
+GET {{BeatCheck.Users.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
