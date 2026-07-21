@@ -12,24 +12,39 @@ namespace BeatCheck.Users.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            var gatewayUrl = builder.Configuration.GetValue<string>("GatewayUrl");
+            if (string.IsNullOrEmpty(gatewayUrl))
+            {
+                throw new Exception("GatewayUrl is not configured in appsettings or environment variables.");
+            }
+
+            var strictCorsPolicy = "_strictCorsPolicy";
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: strictCorsPolicy,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins(gatewayUrl)
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                                  });
+            });
+
             builder.Services.AddControllers();
 
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            // 1. Add the DbContext (you likely already have something like this)
             builder.Services.AddDbContext<UsersDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // 2. Add Authentication & Authorization
             builder.Services.AddAuthorization();
 
-            // 3. Add the new Identity API endpoints
             builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
                 .AddEntityFrameworkStores<UsersDbContext>();
 
             var app = builder.Build();
+
+            app.UseCors(strictCorsPolicy);
 
             using (var scope = app.Services.CreateScope())
             {
@@ -46,7 +61,6 @@ namespace BeatCheck.Users.WebAPI
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
