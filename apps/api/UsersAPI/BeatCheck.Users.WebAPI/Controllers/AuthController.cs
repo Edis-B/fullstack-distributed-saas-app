@@ -19,7 +19,12 @@ namespace BeatCheck.Users.WebAPI.Controllers
         {
             var result = await _userService.LoginAsync(model);
 
-            return Ok("Success");
+            if (!result.Succeeded)
+            {
+                return Unauthorized(new { errors = result.Errors });
+            }
+
+            return Ok(new { token = result.Token });
         }
 
         [HttpPost("register")]
@@ -27,7 +32,12 @@ namespace BeatCheck.Users.WebAPI.Controllers
         {
             var result = await _userService.RegisterAsync(model);
 
-            return Ok("Success");
+            if (!result.Succeeded)
+            {
+                return Unauthorized(new { errors = result.Errors });
+            }
+
+            return Ok(new { token = result.Token });
         }
     }
 }

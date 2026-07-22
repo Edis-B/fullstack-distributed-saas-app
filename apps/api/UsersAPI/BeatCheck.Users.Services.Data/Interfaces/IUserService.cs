@@ -9,6 +9,7 @@ namespace BeatCheck.Users.Services.Data.Interfaces
     {
         Task<AuthResult> LoginAsync(LoginDto model);
         Task<AuthResult> RegisterAsync(RegisterDto model);
+        string GenerateAsymmetricJwt(string userId, string username, string email);
 
     }
 }
