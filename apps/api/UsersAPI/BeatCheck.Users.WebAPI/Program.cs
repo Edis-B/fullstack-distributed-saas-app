@@ -1,8 +1,11 @@
 
-using BeatCheck.Users.Data.Models;
 using BeatCheck.Users.Data;
+using BeatCheck.Users.Data.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace BeatCheck.Users.WebAPI
 {
@@ -30,6 +33,28 @@ namespace BeatCheck.Users.WebAPI
                                   });
             });
 
+            var publicKeyPem = File.ReadAllText("Keys/public.pem");
+            using RSA rsa = RSA.Create();
+            rsa.ImportFromPem(publicKeyPem);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "BeatCheck.UsersAPI", 
+
+                        ValidateAudience = true,
+                        ValidAudience = "BeatCheck.Frontend",
+
+                        ValidateLifetime = true,
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new RsaSecurityKey(rsa) 
+                    };
+                });
+
             builder.Services.AddControllers();
 
             builder.Services.AddOpenApi();
@@ -52,7 +77,6 @@ namespace BeatCheck.Users.WebAPI
                 db.Database.Migrate();
             }
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();

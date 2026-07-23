@@ -1,4 +1,8 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
+
 namespace BeatCheck.Gateway.WebAPI
 {
     public class Program
@@ -28,6 +32,28 @@ namespace BeatCheck.Gateway.WebAPI
                                             .AllowAnyMethod();
                                   });
             });
+
+            var publicKeyPem = File.ReadAllText("Keys/public.pem");
+            using RSA rsa = RSA.Create();
+            rsa.ImportFromPem(publicKeyPem);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "BeatCheck.UsersAPI",
+
+                        ValidateAudience = true,
+                        ValidAudience = "BeatCheck.Frontend",
+
+                        ValidateLifetime = true,
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new RsaSecurityKey(rsa)
+                    };
+                });
 
             var app = builder.Build();
 

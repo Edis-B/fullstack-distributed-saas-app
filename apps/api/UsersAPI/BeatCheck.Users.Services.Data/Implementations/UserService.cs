@@ -2,6 +2,7 @@
 using BeatCheck.Users.Services.Data.DTOs;
 using BeatCheck.Users.Services.Data.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -51,7 +52,7 @@ namespace BeatCheck.Users.Services.Data.Implementations
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = credentials,
                 Issuer = "BeatCheck.UsersAPI",
-                Audience = "BeatCheck.Gateway"
+                Audience = "BeatCheck.Frontend"
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -110,12 +111,43 @@ namespace BeatCheck.Users.Services.Data.Implementations
             };
         }
 
-        public Task<AuthResult> RegisterAsync(RegisterDto model)
+        public async Task<AuthResult> RegisterAsync(RegisterDto model)
         {
             var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+            var errors = new List<String>();
 
+            if (await _userManager.FindByEmailAsync(model.Email) != null)
+            {
+                errors.Add("Email is already in use!");
+            }
 
-            throw new NotImplementedException();
+            if (await _userManager.FindByNameAsync(model.Username) != null)
+            {
+                errors.Add("Username is already in use!");
+            }
+
+            if (errors.Count > 0)
+            {
+                return new AuthResult { Succeeded = false, Errors = errors.ToArray() };
+            }
+
+            var identityResult = await _userManager.CreateAsync(user);
+
+            if (identityResult.Succeeded!)
+            {
+                return new AuthResult
+                {
+                    Succeeded = false,
+                    Errors = new[] { "Error creating user!" }
+                };
+            }
+
+            var token = GenerateAsymmetricJwt(user.Id, user.UserName, user.Email!);
+            return new AuthResult()
+            {
+                Succeeded = true,
+                Token = token
+            };
         }
     }
 }
