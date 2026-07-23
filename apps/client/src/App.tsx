@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { gateway } from "./utils/requestUtils";
+import { Card } from "./components/ui/card";
 
 function App() {
 	// 1. Create a state variable to hold your data once it arrives
@@ -35,6 +36,8 @@ function App() {
 				{/* 3. Render the state. It will be null briefly while awaiting. */}
 				{result2 ? result2 : "Loading..."}
 			</div>
+
+			<Card></Card>
 		</div>
 	);
 }
