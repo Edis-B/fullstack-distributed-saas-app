@@ -8,3 +8,8 @@ export const isValidJson = (item: any): boolean => {
 		return false;
 	}
 };
+
+export const isValidEmail = (email: string) => {
+	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return regex.test(email);
+};

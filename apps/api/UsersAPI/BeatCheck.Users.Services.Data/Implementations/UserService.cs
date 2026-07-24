@@ -133,7 +133,7 @@ namespace BeatCheck.Users.Services.Data.Implementations
 
             var identityResult = await _userManager.CreateAsync(user);
 
-            if (identityResult.Succeeded!)
+            if (!identityResult.Succeeded)
             {
                 return new AuthResult
                 {

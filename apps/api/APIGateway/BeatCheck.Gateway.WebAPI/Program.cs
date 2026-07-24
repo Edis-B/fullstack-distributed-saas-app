@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
@@ -29,7 +28,8 @@ namespace BeatCheck.Gateway.WebAPI
                                   {
                                       policy.WithOrigins(frontendUrl)
                                             .AllowAnyHeader()
-                                            .AllowAnyMethod();
+                                            .AllowAnyMethod()
+                                            .AllowCredentials();
                                   });
             });
 
@@ -59,7 +59,9 @@ namespace BeatCheck.Gateway.WebAPI
 
             app.UseCors(strictCorsPolicy);
 
-            // Put the YARP middleware in the pipeline
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.MapReverseProxy();
 
             app.Run();

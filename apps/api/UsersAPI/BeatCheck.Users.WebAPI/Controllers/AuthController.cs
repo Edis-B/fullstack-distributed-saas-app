@@ -2,7 +2,8 @@
 using BeatCheck.Users.Services.Data.Implementations;
 using BeatCheck.Users.Services.Data.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
+using BeatCheck.Users.Web.Infrastructure;
+using BeatCheck.Users.Web.Infrastructure.Extensions;
 namespace BeatCheck.Users.WebAPI.Controllers
 {
     [ApiController]
@@ -24,7 +25,9 @@ namespace BeatCheck.Users.WebAPI.Controllers
                 return Unauthorized(new { errors = result.Errors });
             }
 
-            return Ok(new { token = result.Token });
+            Response.AppendAuthCookie(result.Token);
+
+            return Ok();
         }
 
         [HttpPost("register")]
@@ -37,7 +40,9 @@ namespace BeatCheck.Users.WebAPI.Controllers
                 return Unauthorized(new { errors = result.Errors });
             }
 
-            return Ok(new { token = result.Token });
+            Response.AppendAuthCookie(result.Token);
+
+            return Ok();
         }
     }
 }

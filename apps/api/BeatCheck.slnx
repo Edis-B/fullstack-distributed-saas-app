@@ -1,7 +1,12 @@
 <Solution>
-  <Project Path="APIGateway/BeatCheck.Gateway.WebAPI/BeatCheck.Gateway.WebAPI.csproj" />
-  <Project Path="UsersAPI/BeatCheck.Users.Data.Models/BeatCheck.Users.Data.Models.csproj" />
-  <Project Path="UsersAPI/BeatCheck.Users.Data/BeatCheck.Users.Data.csproj" />
-  <Project Path="UsersAPI/BeatCheck.Users.Services.Data/BeatCheck.Users.Services.Data.csproj" Id="056f8940-8404-40de-a815-f0ddde871cca" />
-  <Project Path="UsersAPI/BeatCheck.Users.WebAPI/BeatCheck.Users.WebAPI.csproj" />
+  <Folder Name="/Gateway/">
+    <Project Path="APIGateway/BeatCheck.Gateway.WebAPI/BeatCheck.Gateway.WebAPI.csproj" />
+  </Folder>
+  <Folder Name="/Users/">
+    <Project Path="UsersAPI/BeatCheck.Users.Data.Models/BeatCheck.Users.Data.Models.csproj" />
+    <Project Path="UsersAPI/BeatCheck.Users.Data/BeatCheck.Users.Data.csproj" />
+    <Project Path="UsersAPI/BeatCheck.Users.Services.Data/BeatCheck.Users.Services.Data.csproj" Id="056f8940-8404-40de-a815-f0ddde871cca" />
+    <Project Path="UsersAPI/BeatCheck.Users.WebAPI/BeatCheck.Users.WebAPI.csproj" />
+  </Folder>
+  <Project Path="UsersAPI/BeatCheck.Users.Web.Infrastructure/BeatCheck.Users.Web.Infrastructure.csproj" Id="943f515e-8bd6-4ec3-8005-045d0a968f1d" />
 </Solution>

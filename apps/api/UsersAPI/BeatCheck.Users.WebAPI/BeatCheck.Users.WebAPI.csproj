@@ -22,6 +22,7 @@
     <ProjectReference Include="..\BeatCheck.Users.Data.Models\BeatCheck.Users.Data.Models.csproj" />
     <ProjectReference Include="..\BeatCheck.Users.Data\BeatCheck.Users.Data.csproj" />
     <ProjectReference Include="..\BeatCheck.Users.Services.Data\BeatCheck.Users.Services.Data.csproj" />
+    <ProjectReference Include="..\BeatCheck.Users.Web.Infrastructure\BeatCheck.Users.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

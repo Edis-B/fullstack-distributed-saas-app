@@ -5,16 +5,22 @@ interface GetOptions extends RequestInit {
 	queryParams?: Record<string, string>;
 }
 
+interface PostOptions extends Omit<RequestInit, "body"> {
+	body?: any;
+}
+
 const request = async (
 	url: string,
 	method: string,
 	config: RequestInit = {},
 ) => {
-	return await fetch(url, {
+	const options: RequestInit = {
 		method,
 		credentials: "include",
 		...config,
-	});
+	};
+
+	return fetch(url, options);
 };
 
 const gateway = {
@@ -30,16 +36,24 @@ const gateway = {
 		return request(`${gatewayApi}${url}${separator}`, "GET", config);
 	},
 
-	post: (url: string, postOptions?: RequestInit) => {
-		const { body, ...config } = postOptions || {};
+	post: (url: string, postOptions?: PostOptions) => {
+		const { body, headers, ...config } = postOptions || {};
 
 		let finalBody = body;
-		if (!isValidJson(finalBody)) {
+
+		const finalHeaders = new Headers(headers);
+
+		if (finalBody && !isValidJson(finalBody)) {
 			finalBody = JSON.stringify(finalBody);
+
+			if (!finalHeaders.has("Content-Type")) {
+				finalHeaders.set("Content-Type", "application/json");
+			}
 		}
 
 		return request(`${gatewayApi}${url}`, "POST", {
 			body: finalBody,
+			headers: finalHeaders,
 			...config,
 		});
 	},

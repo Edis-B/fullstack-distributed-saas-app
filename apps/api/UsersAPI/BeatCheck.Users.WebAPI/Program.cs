@@ -1,6 +1,8 @@
 
 using BeatCheck.Users.Data;
 using BeatCheck.Users.Data.Models;
+using BeatCheck.Users.Services.Data.Implementations;
+using BeatCheck.Users.Services.Data.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace BeatCheck.Users.WebAPI
                 throw new Exception("GatewayUrl is not configured in appsettings or environment variables.");
             }
 
+            builder.Services.AddScoped<IUserService, UserService>();
+
             var strictCorsPolicy = "_strictCorsPolicy";
             builder.Services.AddCors(options =>
             {
@@ -29,7 +33,8 @@ namespace BeatCheck.Users.WebAPI
                                   {
                                       policy.WithOrigins(gatewayUrl)
                                             .AllowAnyHeader()
-                                            .AllowAnyMethod();
+                                            .AllowAnyMethod()
+                                            .AllowCredentials();
                                   });
             });
 
@@ -43,7 +48,7 @@ namespace BeatCheck.Users.WebAPI
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = "BeatCheck.UsersAPI", 
+                        ValidIssuer = "BeatCheck.UsersAPI",
 
                         ValidateAudience = true,
                         ValidAudience = "BeatCheck.Frontend",
@@ -51,7 +56,7 @@ namespace BeatCheck.Users.WebAPI
                         ValidateLifetime = true,
 
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new RsaSecurityKey(rsa) 
+                        IssuerSigningKey = new RsaSecurityKey(rsa)
                     };
                 });
 
@@ -84,6 +89,7 @@ namespace BeatCheck.Users.WebAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

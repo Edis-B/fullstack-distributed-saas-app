@@ -14,20 +14,17 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, type ReactEventHandler } from "react";
 import { gatewayApi } from "@/common/constants";
 import { gateway } from "@/utils/requestUtils";
+import { registerUserAsync } from "@/services/userService";
 
 export default function Register() {
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const handleSubmit = (e: ReactEventHandler) => {
-		gateway.post(`${gatewayApi}/api/users/register`, {
-			body: JSON.stringify({
-				username,
-				email,
-				password,
-			}),
-		});
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		await registerUserAsync(username, email, password);
 	};
 
 	return (
@@ -72,15 +69,19 @@ export default function Register() {
 					</div>
 				</CardContent>
 
-				<CardFooter className="flex flex-col gap-4">
-					<Button className="w-full">Register</Button>
-					<Link
-						to="/login"
-						className="text-sm text-muted-foreground hover:underline hover:text-primary"
-					>
-						Already have an account?
-					</Link>
-				</CardFooter>
+				<form onSubmit={handleSubmit}>
+					<CardFooter className="flex flex-col gap-4">
+						<Button className="w-full" type="submit">
+							Register
+						</Button>
+						<Link
+							to="/login"
+							className="text-sm text-muted-foreground hover:underline hover:text-primary"
+						>
+							Already have an account?
+						</Link>
+					</CardFooter>
+				</form>
 			</Card>
 		</div>
 	);
