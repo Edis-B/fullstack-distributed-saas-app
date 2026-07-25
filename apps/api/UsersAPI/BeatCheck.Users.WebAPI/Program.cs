@@ -38,9 +38,16 @@ namespace BeatCheck.Users.WebAPI
                                   });
             });
 
+            var privateKeyPem = File.ReadAllText("Keys/private.pem");
+            RSA privateRSA = RSA.Create();
+            privateRSA.ImportFromPem(privateKeyPem);
+            RsaSecurityKey privateSecurityKey = new RsaSecurityKey(privateRSA);
+            builder.Services.AddSingleton(privateSecurityKey);
+
             var publicKeyPem = File.ReadAllText("Keys/public.pem");
-            using RSA rsa = RSA.Create();
-            rsa.ImportFromPem(publicKeyPem);
+            RSA publicRSA = RSA.Create();
+            publicRSA.ImportFromPem(publicKeyPem);
+            RsaSecurityKey publicSecurityKey = new RsaSecurityKey(publicRSA);
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -56,20 +63,33 @@ namespace BeatCheck.Users.WebAPI
                         ValidateLifetime = true,
 
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new RsaSecurityKey(rsa)
+                        IssuerSigningKey = publicSecurityKey
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var token = context.Request.Cookies["jwt_token"];
+                            if (!string.IsNullOrEmpty(token))
+                            {
+                                context.Token = token;
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
             builder.Services.AddControllers();
 
-            builder.Services.AddOpenApi();
+            builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<UsersDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddAuthorization();
 
-            builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+            builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<UsersDbContext>();
 
             var app = builder.Build();
@@ -84,7 +104,8 @@ namespace BeatCheck.Users.WebAPI
 
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();

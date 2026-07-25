@@ -18,25 +18,21 @@ namespace BeatCheck.Users.Services.Data.Implementations
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RsaSecurityKey _rsaSecurityKey;
         private readonly IConfiguration _config;
 
         public UserService(UserManager<ApplicationUser> userManager,
+            RsaSecurityKey rsaSecurityKey,
             IConfiguration config)
         {
             _userManager = userManager;
+            _rsaSecurityKey = rsaSecurityKey;
             _config = config;
         }
 
         public string GenerateAsymmetricJwt(string userId, string username, string email)
         {
-            var keyPath = _config["JwtSettings:PrivateKeyPath"];
-            var privateKeyText = File.ReadAllText(keyPath);
-
-            using RSA rsa = RSA.Create(2048);
-            rsa.ImportFromPem(privateKeyText);
-
-            var securityKey = new RsaSecurityKey(rsa);
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
+            var credentials = new SigningCredentials(_rsaSecurityKey, SecurityAlgorithms.RsaSha256);
 
             var claims = new[]
             {
@@ -59,6 +55,11 @@ namespace BeatCheck.Users.Services.Data.Implementations
             var securityToken = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(securityToken);
+        }
+
+        public async Task<UserDataDto> GetUserAsync(ClaimsPrincipal user)
+        {
+            return new UserDataDto();
         }
 
         public async Task<AuthResult> LoginAsync(LoginDto model)
@@ -131,7 +132,7 @@ namespace BeatCheck.Users.Services.Data.Implementations
                 return new AuthResult { Succeeded = false, Errors = errors.ToArray() };
             }
 
-            var identityResult = await _userManager.CreateAsync(user);
+            var identityResult = await _userManager.CreateAsync(user, model.Password);
 
             if (!identityResult.Succeeded)
             {

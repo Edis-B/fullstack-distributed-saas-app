@@ -6,7 +6,8 @@
     <Project Path="UsersAPI/BeatCheck.Users.Data.Models/BeatCheck.Users.Data.Models.csproj" />
     <Project Path="UsersAPI/BeatCheck.Users.Data/BeatCheck.Users.Data.csproj" />
     <Project Path="UsersAPI/BeatCheck.Users.Services.Data/BeatCheck.Users.Services.Data.csproj" Id="056f8940-8404-40de-a815-f0ddde871cca" />
+    <Project Path="UsersAPI/BeatCheck.Users.Web.Infrastructure/BeatCheck.Users.Web.Infrastructure.csproj" Id="943f515e-8bd6-4ec3-8005-045d0a968f1d" />
     <Project Path="UsersAPI/BeatCheck.Users.WebAPI/BeatCheck.Users.WebAPI.csproj" />
   </Folder>
-  <Project Path="UsersAPI/BeatCheck.Users.Web.Infrastructure/BeatCheck.Users.Web.Infrastructure.csproj" Id="943f515e-8bd6-4ec3-8005-045d0a968f1d" />
+  <Project Path="Shared/BeatCheck.Shared/BeatCheck.Shared.csproj" Id="e607beaf-3884-4f72-94b3-ba2439581bc2" />
 </Solution>

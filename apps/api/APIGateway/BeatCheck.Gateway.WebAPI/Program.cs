@@ -34,8 +34,9 @@ namespace BeatCheck.Gateway.WebAPI
             });
 
             var publicKeyPem = File.ReadAllText("Keys/public.pem");
-            using RSA rsa = RSA.Create();
-            rsa.ImportFromPem(publicKeyPem);
+            RSA publicRSA = RSA.Create();
+            publicRSA.ImportFromPem(publicKeyPem);
+            RsaSecurityKey publicSecurityKey = new RsaSecurityKey(publicRSA);
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -51,9 +52,11 @@ namespace BeatCheck.Gateway.WebAPI
                         ValidateLifetime = true,
 
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new RsaSecurityKey(rsa)
+                        IssuerSigningKey = publicSecurityKey
                     };
                 });
+
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 

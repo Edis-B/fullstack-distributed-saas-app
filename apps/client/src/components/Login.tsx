@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { loginUserAsync } from "@/services/userService";
 import { useState } from "react";
+import { AuthService } from "@/api/generated/users";
 
 export default function Login() {
 	const [usernameOrEmail, setUsernameOrEmail] = useState("");
@@ -20,7 +20,17 @@ export default function Login() {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		await loginUserAsync(usernameOrEmail, password);
+		try {
+			const response = await AuthService.postLogin({
+				usernameOrEmail,
+				password,
+				rememberMe: false,
+			});
+
+			console.log("Login successful!", response);
+		} catch (error) {
+			console.error("Login failed:", error);
+		}
 	};
 
 	return (

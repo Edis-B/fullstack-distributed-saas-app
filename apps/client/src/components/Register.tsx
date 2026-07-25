@@ -11,10 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useEffect, useState, type ReactEventHandler } from "react";
-import { gatewayApi } from "@/common/constants";
-import { gateway } from "@/utils/requestUtils";
-import { registerUserAsync } from "@/services/userService";
+import { useState } from "react";
+import { AuthService } from "@/api/generated/users";
 
 export default function Register() {
 	const [username, setUsername] = useState("");
@@ -24,7 +22,17 @@ export default function Register() {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		await registerUserAsync(username, email, password);
+		try {
+			const response = await AuthService.postRegister({
+				username,
+				email,
+				password,
+			});
+
+			console.log("Registration successful!", response);
+		} catch (error) {
+			console.error("Registration failed:", error);
+		}
 	};
 
 	return (
