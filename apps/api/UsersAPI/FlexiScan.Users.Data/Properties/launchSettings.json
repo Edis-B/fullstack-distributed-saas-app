@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FlexiScan.Users.Data": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Project"
+    }
+  }
+}

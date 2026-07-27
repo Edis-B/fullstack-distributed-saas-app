@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/Gateway/">
+    <Project Path="APIGateway/FlexiScan.Gateway.WebAPI/FlexiScan.Gateway.WebAPI.csproj" />
+  </Folder>
+  <Folder Name="/Subscriptions/">
+    <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.Data.Models/FlexiScan.Subscriptions.Data.Models.csproj" Id="82d87b20-dfc2-41b7-9c95-9231fb4c4629" />
+    <Project Path="SubscriptionsAPI/Flexiscan.Subscriptions.Data/Flexiscan.Subscriptions.Data.csproj" Id="ae37a17c-3ed6-48ad-a01b-4cf73c16f07f" />
+    <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.WebAPI/FlexiScan.Subscriptions.WebAPI.csproj" Id="ff4d292f-c78b-4492-8cb6-2e64b29dba4c" />
+  </Folder>
+  <Folder Name="/Users/">
+    <Project Path="UsersAPI/FlexiScan.Users.Data.Models/FlexiScan.Users.Data.Models.csproj" />
+    <Project Path="UsersAPI/FlexiScan.Users.Data/FlexiScan.Users.Data.csproj" />
+    <Project Path="UsersAPI/FlexiScan.Users.Services.Data/FlexiScan.Users.Services.Data.csproj" Id="056f8940-8404-40de-a815-f0ddde871cca" />
+    <Project Path="UsersAPI/FlexiScan.Users.Web.Infrastructure/FlexiScan.Users.Web.Infrastructure.csproj" Id="943f515e-8bd6-4ec3-8005-045d0a968f1d" />
+    <Project Path="UsersAPI/FlexiScan.Users.WebAPI/FlexiScan.Users.WebAPI.csproj" />
+  </Folder>
+  <Project Path="Shared/FlexiScan.Shared/FlexiScan.Shared.csproj" Id="e607beaf-3884-4f72-94b3-ba2439581bc2" />
+</Solution>
