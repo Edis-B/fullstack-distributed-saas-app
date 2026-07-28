@@ -4,7 +4,8 @@
   </Folder>
   <Folder Name="/Subscriptions/">
     <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.Data.Models/FlexiScan.Subscriptions.Data.Models.csproj" Id="82d87b20-dfc2-41b7-9c95-9231fb4c4629" />
-    <Project Path="SubscriptionsAPI/Flexiscan.Subscriptions.Data/Flexiscan.Subscriptions.Data.csproj" Id="ae37a17c-3ed6-48ad-a01b-4cf73c16f07f" />
+    <Project Path="SubscriptionsAPI/Flexiscan.Subscriptions.Data/Flexiscan.Subscriptions.Data.csproj" DisplayName="FlexiScan.Subscriptions.Data" Id="ae37a17c-3ed6-48ad-a01b-4cf73c16f07f" />
+    <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.Services.Data/FlexiScan.Subscriptions.Services.Data.csproj" Id="bddddbfd-8252-45b1-8c03-bfa26de6ac81" />
     <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.WebAPI/FlexiScan.Subscriptions.WebAPI.csproj" Id="ff4d292f-c78b-4492-8cb6-2e64b29dba4c" />
   </Folder>
   <Folder Name="/Users/">

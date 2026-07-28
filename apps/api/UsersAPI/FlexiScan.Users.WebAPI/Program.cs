@@ -24,8 +24,6 @@ namespace FlexiScan.Users.WebAPI
                 throw new Exception("GatewayUrl is not configured in appsettings or environment variables.");
             }
 
-            builder.Services.AddScoped<IUserService, UserService>();
-
             var strictCorsPolicy = "_strictCorsPolicy";
             builder.Services.AddCors(options =>
             {
@@ -38,6 +36,8 @@ namespace FlexiScan.Users.WebAPI
                                             .AllowCredentials();
                                   });
             });
+
+            builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.RegisterPrivateRSAKeyService(
                 builder.Configuration,
@@ -67,6 +67,7 @@ namespace FlexiScan.Users.WebAPI
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+                if (db == null) throw new Exception("Error creating a db context instance!");
                 db.Database.Migrate();
             }
 

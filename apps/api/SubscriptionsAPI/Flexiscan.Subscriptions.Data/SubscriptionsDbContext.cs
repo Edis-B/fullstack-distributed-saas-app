@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FlexiScan.Subscriptions.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Flexiscan.Subscriptions.Data
+namespace FlexiScan.Subscriptions.Data
 {
     public class SubscriptionsDbContext : DbContext
     {
@@ -11,5 +12,9 @@ namespace Flexiscan.Subscriptions.Data
         protected SubscriptionsDbContext()
         {
         }
+
+        public virtual DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public virtual DbSet<UserSubscription> UserSubscriptions { get; set; }
+        public virtual DbSet<BillingCustomer> BillingCustomers { get; set; }
     }
 }
