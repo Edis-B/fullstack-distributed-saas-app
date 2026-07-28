@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\FlexiScan.Shared\FlexiScan.Shared.csproj" />
     <ProjectReference Include="..\..\UsersAPI\FlexiScan.Users.Services.Data\FlexiScan.Users.Services.Data.csproj" />
   </ItemGroup>
 

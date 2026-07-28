@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\FlexiScan.Shared\FlexiScan.Shared.csproj" />
     <ProjectReference Include="..\FlexiScan.Users.Data.Models\FlexiScan.Users.Data.Models.csproj" />
     <ProjectReference Include="..\FlexiScan.Users.Data\FlexiScan.Users.Data.csproj" />
     <ProjectReference Include="..\FlexiScan.Users.Services.Data\FlexiScan.Users.Services.Data.csproj" />

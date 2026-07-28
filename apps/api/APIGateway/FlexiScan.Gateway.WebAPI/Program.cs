@@ -10,7 +10,6 @@ namespace FlexiScan.Gateway.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add YARP services to the container and load the config section
             builder.Services.AddReverseProxy()
                 .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
@@ -33,30 +32,7 @@ namespace FlexiScan.Gateway.WebAPI
                                   });
             });
 
-            var publicKeyPem = File.ReadAllText("Keys/public.pem");
-            RSA publicRSA = RSA.Create();
-            publicRSA.ImportFromPem(publicKeyPem);
-            RsaSecurityKey publicSecurityKey = new RsaSecurityKey(publicRSA);
-
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = "FlexiScan.UsersAPI",
-
-                        ValidateAudience = true,
-                        ValidAudience = "FlexiScan.Frontend",
-
-                        ValidateLifetime = true,
-
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = publicSecurityKey
-                    };
-                });
-
-            builder.Services.AddAuthorization();
+            builder.Services.AddFlexiScanJwtAuth();
 
             var app = builder.Build();
 

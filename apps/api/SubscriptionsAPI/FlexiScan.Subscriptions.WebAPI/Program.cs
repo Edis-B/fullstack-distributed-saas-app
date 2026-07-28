@@ -1,4 +1,7 @@
 
+using Flexiscan.Subscriptions.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace FlexiScan.Subscriptions.WebAPI
 {
     public class Program
@@ -7,24 +10,35 @@ namespace FlexiScan.Subscriptions.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+
+            builder.Services.AddFlexiScanJwtAuth();
+
+            builder.Services.AddDbContext<SubscriptionsDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SubscriptionsDb")));
+
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddSwaggerGen();
+            }
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetService<SubscriptionsDbContext>();
+                db.Database.Migrate();
             }
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
