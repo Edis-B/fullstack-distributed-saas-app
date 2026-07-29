@@ -14,6 +14,7 @@ namespace FlexiScan.Subscriptions.Data
         }
 
         public virtual DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public virtual DbSet<SubscriptionPrice> SubscriptionPrices { get; set; }
         public virtual DbSet<UserSubscription> UserSubscriptions { get; set; }
         public virtual DbSet<BillingCustomer> BillingCustomers { get; set; }
     }

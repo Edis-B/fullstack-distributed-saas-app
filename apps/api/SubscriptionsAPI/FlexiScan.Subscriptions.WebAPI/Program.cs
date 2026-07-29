@@ -37,8 +37,9 @@ namespace FlexiScan.Subscriptions.WebAPI
                                   });
             });
 
+            string? connectionString = builder.Configuration.GetConnectionString("SubscriptionsDb");
             builder.Services.AddDbContext<SubscriptionsDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SubscriptionsDb")));
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
 
@@ -76,7 +77,7 @@ namespace FlexiScan.Subscriptions.WebAPI
 
             app.MapControllers();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }

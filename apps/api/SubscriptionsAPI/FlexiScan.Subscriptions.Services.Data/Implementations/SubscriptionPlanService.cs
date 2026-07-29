@@ -20,30 +20,44 @@ namespace FlexiScan.Subscriptions.Services.Data.Implementations
         {
             var priceService = new PriceService();
 
-            var options = new PriceListOptions { Active = true };
+            var options = new PriceListOptions { Active = true, Expand = new List<string> { "data.product" } };
             StripeList<Price> stripePrices = await priceService.ListAsync(options);
-
             foreach (var stripePrice in stripePrices)
             {
-                var exists = await _dbContext.SubscriptionPlans
+                var subscriptionPriceExists = await _dbContext.SubscriptionPrices
                     .AnyAsync(p => p.StripePriceId == stripePrice.Id);
 
-                if (!exists)
+                if (subscriptionPriceExists) continue;
+
+                var subscriptionPlan = await _dbContext.SubscriptionPlans
+                    .FirstOrDefaultAsync(p => p.StripeProductId == stripePrice.ProductId);
+
+                var subscriptionPlanExists = subscriptionPlan != null;
+                if (!subscriptionPlanExists)
                 {
-                    var newPlan = new SubscriptionPlan
+                    subscriptionPlan = new SubscriptionPlan
                     {
-                        StripePriceId = stripePrice.Id,
+                        Name = stripePrice.Product.Name ?? "Unknown Product Name",
                         StripeProductId = stripePrice.ProductId,
-                        Price = (decimal)stripePrice.UnitAmount! / 100m,
-                        Currency = stripePrice.Currency,
-                        Interval = stripePrice.Recurring?.Interval ?? "one-time"
                     };
-
-                    _dbContext.SubscriptionPlans.Add(newPlan);
                 }
-            }
 
-            await _dbContext.SaveChangesAsync();
+                var newPrice = new SubscriptionPrice
+                {
+                    StripePriceId = stripePrice.Id,
+                    Price = (decimal)stripePrice.UnitAmount! / 100m,
+                    SubscriptionPlan = subscriptionPlan!,
+                    Name = stripePrice.Nickname ?? "Unknown Pricing Plan Name",
+                    Currency = stripePrice.Currency,
+                    Interval = stripePrice.Recurring?.Interval ?? "one-time"
+                };
+
+                if (!subscriptionPlanExists)
+                    _dbContext.SubscriptionPlans.Add(subscriptionPlan!);
+
+                _dbContext.SubscriptionPrices.Add(newPrice);
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }
