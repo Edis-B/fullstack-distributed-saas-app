@@ -65,7 +65,7 @@ namespace FlexiScan.Subscriptions.WebAPI
                 db.Database.Migrate();
 
                 var subscriptionService = scope.ServiceProvider.GetRequiredService<ISubscriptionPlanService>();
-                await subscriptionService.DiscoverSubscriptionPlans();
+                await subscriptionService.UpdateSubscriptionPlans();
             }
 
             app.UseCors(strictCorsPolicy);

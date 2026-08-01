@@ -10,5 +10,6 @@ namespace FlexiScan.Subscriptions.Data.Models
         public string StripeProductId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public ICollection<SubscriptionPrice> SubscriptionPrices { get; set; } = new List<SubscriptionPrice>();
+        public PlanFeatures Features { get; set; } = new PlanFeatures();
     }
 }

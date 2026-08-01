@@ -6,6 +6,6 @@ namespace FlexiScan.Subscriptions.Services.Data.Interfaces
 {
     public interface ISubscriptionPlanService
     {
-        Task DiscoverSubscriptionPlans();
+        Task UpdateSubscriptionPlans();
     }
 }
