@@ -1,4 +1,5 @@
 
+using FlexiScan.Shared.Extensions;
 using FlexiScan.Subscriptions.Data;
 using FlexiScan.Subscriptions.Data.Models;
 using FlexiScan.Subscriptions.Services.Data.Implementations;
@@ -17,25 +18,7 @@ namespace FlexiScan.Subscriptions.WebAPI
             builder.Services.AddControllers();
 
             builder.Services.AddFlexiScanJwtAuth();
-
-            var gatewayUrl = builder.Configuration.GetValue<string>("GatewayUrl");
-            if (string.IsNullOrEmpty(gatewayUrl))
-            {
-                throw new Exception("GatewayUrl is not configured in appsettings or environment variables.");
-            }
-
-            var strictCorsPolicy = "_strictCorsPolicy";
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy(name: strictCorsPolicy,
-                                  policy =>
-                                  {
-                                      policy.WithOrigins(gatewayUrl)
-                                            .AllowAnyHeader()
-                                            .AllowAnyMethod()
-                                            .AllowCredentials();
-                                  });
-            });
+            builder.Services.AddFlexiScanGatewayCors(builder.Configuration);
 
             string? connectionString = builder.Configuration.GetConnectionString("SubscriptionsDb");
             builder.Services.AddDbContext<SubscriptionsDbContext>(options =>
@@ -68,7 +51,7 @@ namespace FlexiScan.Subscriptions.WebAPI
                 await subscriptionService.UpdateSubscriptionPlans();
             }
 
-            app.UseCors(strictCorsPolicy);
+            app.UseCors(CorsPolicyExtensions.GatewayCorsPolicyName);
 
             app.UseHttpsRedirection();
 

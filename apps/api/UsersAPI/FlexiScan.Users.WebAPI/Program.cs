@@ -1,4 +1,5 @@
 
+using FlexiScan.Shared.Extensions;
 using FlexiScan.Users.Data;
 using FlexiScan.Users.Data.Models;
 using FlexiScan.Users.Services.Data.Implementations;
@@ -18,32 +19,14 @@ namespace FlexiScan.Users.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var gatewayUrl = builder.Configuration.GetValue<string>("GatewayUrl");
-            if (string.IsNullOrEmpty(gatewayUrl))
-            {
-                throw new Exception("GatewayUrl is not configured in appsettings or environment variables.");
-            }
-
-            var strictCorsPolicy = "_strictCorsPolicy";
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy(name: strictCorsPolicy,
-                                  policy =>
-                                  {
-                                      policy.WithOrigins(gatewayUrl)
-                                            .AllowAnyHeader()
-                                            .AllowAnyMethod()
-                                            .AllowCredentials();
-                                  });
-            });
+            builder.Services.AddFlexiScanGatewayCors(builder.Configuration);
+            builder.Services.AddFlexiScanJwtAuth();
 
             builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.RegisterPrivateRSAKeyService(
                 builder.Configuration,
                 builder.Environment);
-
-            builder.Services.AddFlexiScanJwtAuth();
 
             builder.Services.AddControllers();
 
@@ -55,19 +38,16 @@ namespace FlexiScan.Users.WebAPI
             builder.Services.AddDbContext<UsersDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("UsersDb")));
 
-            builder.Services.AddAuthorization();
-
             builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<UsersDbContext>();
 
             var app = builder.Build();
 
-            app.UseCors(strictCorsPolicy);
+            app.UseCors(CorsPolicyExtensions.GatewayCorsPolicyName);
 
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-                if (db == null) throw new Exception("Error creating a db context instance!");
                 db.Database.Migrate();
             }
 

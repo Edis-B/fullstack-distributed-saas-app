@@ -1,3 +1,4 @@
+using FlexiScan.Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
@@ -19,24 +20,11 @@ namespace FlexiScan.Gateway.WebAPI
                 throw new Exception("FrontendUrl is not configured in appsettings or environment variables.");
             }
 
-            var strictCorsPolicy = "_strictCorsPolicy";
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy(name: strictCorsPolicy,
-                                  policy =>
-                                  {
-                                      policy.WithOrigins(frontendUrl)
-                                            .AllowAnyHeader()
-                                            .AllowAnyMethod()
-                                            .AllowCredentials();
-                                  });
-            });
-
             builder.Services.AddFlexiScanJwtAuth();
 
             var app = builder.Build();
 
-            app.UseCors(strictCorsPolicy);
+            app.UseCors(CorsPolicyExtensions.GatewayCorsPolicyName);
 
             app.UseAuthentication();
             app.UseAuthorization();

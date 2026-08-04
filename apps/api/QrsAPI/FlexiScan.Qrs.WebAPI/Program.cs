@@ -1,5 +1,6 @@
 
 using FlexiScan.Qrs.Data;
+using FlexiScan.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlexiScan.Qrs.WebAPI
@@ -10,7 +11,9 @@ namespace FlexiScan.Qrs.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("QrsConnection");
+            builder.Services.AddFlexiScanGatewayCors(builder.Configuration);
+
+            string? connectionString = builder.Configuration.GetConnectionString("QrsConnection");
             if (connectionString == null)
             {
                 throw new Exception("QrsConnection was not found");
@@ -24,13 +27,20 @@ namespace FlexiScan.Qrs.WebAPI
 
             builder.Services.AddOpenApi();
 
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddSwaggerGen();
+            }
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
+            app.UseCors(CorsPolicyExtensions.GatewayCorsPolicyName);
             app.UseHttpsRedirection();
 
             app.UseAuthentication();

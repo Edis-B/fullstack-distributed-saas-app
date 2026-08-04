@@ -9,16 +9,11 @@ namespace FlexiScan.Subscriptions.Data
         {
         }
 
-        protected SubscriptionsDbContext()
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // This tells EF Core: "Take the PlanFeatures class and flatten its 
-            // properties into columns on the SubscriptionPlans table."
+            // flatten its properties into columns on the SubscriptionPlans table
             modelBuilder.Entity<SubscriptionPlan>()
                 .OwnsOne(p => p.Features);
         }
