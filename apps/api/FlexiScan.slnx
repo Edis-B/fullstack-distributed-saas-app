@@ -2,9 +2,15 @@
   <Folder Name="/Gateway/">
     <Project Path="APIGateway/FlexiScan.Gateway.WebAPI/FlexiScan.Gateway.WebAPI.csproj" />
   </Folder>
+  <Folder Name="/Qrs/">
+    <Project Path="QrsAPI/FlexiScan.Qrs.Data.Models/FlexiScan.Qrs.Data.Models.csproj" Id="7b3047df-ec5c-48a5-b733-0cc171ea31da" />
+    <Project Path="QrsAPI/FlexiScan.Qrs.Data/FlexiScan.Qrs.Data.csproj" Id="f2f8a7b7-0154-4067-a84d-7ba4111e2ded" />
+    <Project Path="QrsAPI/FlexiScan.Qrs.Services.Data/FlexiScan.Qrs.Services.Data.csproj" Id="3deb6575-2e3e-417b-a3cb-385b094ef4f8" />
+    <Project Path="QrsAPI/FlexiScan.Qrs.WebAPI/FlexiScan.Qrs.WebAPI.csproj" />
+  </Folder>
   <Folder Name="/Subscriptions/">
     <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.Data.Models/FlexiScan.Subscriptions.Data.Models.csproj" Id="82d87b20-dfc2-41b7-9c95-9231fb4c4629" />
-    <Project Path="SubscriptionsAPI/Flexiscan.Subscriptions.Data/Flexiscan.Subscriptions.Data.csproj" DisplayName="FlexiScan.Subscriptions.Data" Id="ae37a17c-3ed6-48ad-a01b-4cf73c16f07f" />
+    <Project Path="SubscriptionsAPI/Flexiscan.Subscriptions.Data/Flexiscan.Subscriptions.Data.csproj" Id="ae37a17c-3ed6-48ad-a01b-4cf73c16f07f" />
     <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.Services.Data/FlexiScan.Subscriptions.Services.Data.csproj" Id="bddddbfd-8252-45b1-8c03-bfa26de6ac81" />
     <Project Path="SubscriptionsAPI/FlexiScan.Subscriptions.WebAPI/FlexiScan.Subscriptions.WebAPI.csproj" Id="ff4d292f-c78b-4492-8cb6-2e64b29dba4c" />
   </Folder>
