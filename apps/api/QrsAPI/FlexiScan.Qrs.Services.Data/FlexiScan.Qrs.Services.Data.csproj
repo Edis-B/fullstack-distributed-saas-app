@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Implementations\" />
-    <Folder Include="DTOs\" />
+    <ProjectReference Include="..\FlexiScan.Qrs.Data.Models\FlexiScan.Qrs.Data.Models.csproj" />
+    <ProjectReference Include="..\FlexiScan.Qrs.Data\FlexiScan.Qrs.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+    minio:
+        image: minio/minio
+        ports:
+            - "9000:9000" # The API port (Your C# app talks to this)
+            - "9001:9001" # The Web UI port
+        environment:
+            - MINIO_ROOT_USER=local-user
+            - MINIO_ROOT_PASSWORD=local-user
+        command: server /data --console-address ":9001"
