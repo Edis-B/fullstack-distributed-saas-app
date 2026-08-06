@@ -6,6 +6,7 @@
     <Project Path="QrsAPI/FlexiScan.Qrs.Data.Models/FlexiScan.Qrs.Data.Models.csproj" Id="7b3047df-ec5c-48a5-b733-0cc171ea31da" />
     <Project Path="QrsAPI/FlexiScan.Qrs.Data/FlexiScan.Qrs.Data.csproj" Id="f2f8a7b7-0154-4067-a84d-7ba4111e2ded" />
     <Project Path="QrsAPI/FlexiScan.Qrs.Services.Data/FlexiScan.Qrs.Services.Data.csproj" Id="3deb6575-2e3e-417b-a3cb-385b094ef4f8" />
+    <Project Path="QrsAPI/FlexiScan.Qrs.Services.Infrastructure/FlexiScan.Qrs.Services.Infrastructure.csproj" Id="e3555bcb-49e9-4064-834f-804019a3aca1" />
     <Project Path="QrsAPI/FlexiScan.Qrs.WebAPI/FlexiScan.Qrs.WebAPI.csproj" />
   </Folder>
   <Folder Name="/Subscriptions/">

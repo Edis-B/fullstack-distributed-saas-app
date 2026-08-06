@@ -1,4 +1,6 @@
 
+using Amazon.Runtime;
+using Amazon.S3;
 using FlexiScan.Qrs.Data;
 using FlexiScan.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +27,22 @@ namespace FlexiScan.Qrs.WebAPI
             builder.Services.AddControllers();
             builder.Services.AddFlexiScanJwtAuth();
 
-            builder.Services.AddOpenApi();
+            // 1. Read the settings from appsettings.json
+            var storageConfig = builder.Configuration.GetSection("Storage");
+            var accessKey = storageConfig["AccessKey"];
+            var secretKey = storageConfig["SecretKey"];
+            var serviceUrl = storageConfig["ServiceUrl"];
+
+            // 2. Configure the credentials and client settings
+            var awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+            var s3Config = new AmazonS3Config
+            {
+                ServiceURL = serviceUrl,
+                ForcePathStyle = true // MANDATORY for MinIO and local emulators
+            };
+
+            // 3. Register the client as RedirectAsync Singleton so your services can inject it
+            builder.Services.AddSingleton<IAmazonS3>(new AmazonS3Client(awsCredentials, s3Config));
 
             if (builder.Environment.IsDevelopment())
             {

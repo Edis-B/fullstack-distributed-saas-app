@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+
+    <!-- Fallback for users with extremely strict browsers/ad-blockers that disable JavaScript -->
+    <noscript>
+        <meta http-equiv="refresh" content="0;url={{DESTINATION_URL}}">
+    </noscript>
+</head>
+<body>
+    <img src="{{PIXEL_URL}}" width="1" height="1" style="display:none;" alt="" />
+
+    <script>
+        setTimeout(function() {
+            window.location.replace("{{DESTINATION_URL}}");
+        }, 500);
+    </script>
+</body>
+</html>

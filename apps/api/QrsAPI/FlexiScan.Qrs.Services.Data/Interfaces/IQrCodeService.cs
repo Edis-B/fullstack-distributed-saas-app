@@ -7,6 +7,6 @@ namespace FlexiScan.Qrs.Services.Data.Interfaces
 {
     public interface IQrCodeService
     {
-        Task<QrCodeResult> GetQrCodeAsync(string shortCode);
+        Task<QrCodeResult> ProcessScanAsync(string shortCode, ScanMetadata scanMetadata);
     }
 }
